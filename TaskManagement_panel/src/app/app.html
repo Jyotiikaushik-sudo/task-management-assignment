@@ -1,0 +1,86 @@
+<div class="page-container">
+
+  <!-- CREATE / UPDATE -->
+  <div class="card">
+    <h2>{{ isEditMode ? 'Update Task' : 'Create Task' }}</h2>
+
+    <div class="form-box">
+      <input type="text" placeholder="Title" [(ngModel)]="newTask.taskTitle">
+      <input type="text" placeholder="Description" [(ngModel)]="newTask.taskDescription">
+      <input type="date" [(ngModel)]="newTask.taskDueDate">
+
+      <select [(ngModel)]="newTask.taskStatus" style="width: 100%;">
+        <option>Pending</option>
+        <option>Success</option>
+      </select>
+
+      <input type="text" placeholder="Remarks" [(ngModel)]="newTask.taskRemarks">
+      <input type="number" placeholder="Created By User ID"
+             [(ngModel)]="newTask.createdByUserId">
+
+      <div class="btn-row">
+        <button *ngIf="!isEditMode" (click)="createTask()">Create Task</button>
+        <button *ngIf="isEditMode" (click)="updateTask()">Update Task</button>
+        <button *ngIf="isEditMode" class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div class="card">
+    <div class="table-header">
+      <h2>📋 Task List Summary</h2>
+
+      <div>
+        <input type="number" placeholder="Enter Task ID" style="margin-right: 10px;width: 200px; height: 30px;"
+               [(ngModel)]="searchId" class="search-box">
+        <button class="button" (click)="searchById()">Search</button>
+        <button class="button" (click)="loadTasks()">Reset</button>
+      </div>
+    </div>
+
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Due Date</th>
+          <th>Description</th>
+          <th>Remarks</th>
+          <th>Created On</th>
+          <th>Created By</th>
+          <th>Updated By</th>
+          <th>Deleted</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let task of tasks; trackBy: trackByTaskId">
+          <td>{{ task.task_title }}</td>
+
+          <td>
+            <span class="status"
+                  [ngClass]="task.task_status.toLowerCase()">
+              {{ task.task_status }}
+            </span>
+          </td>
+
+          <td>{{ task.task_due_date | date:'dd-MM-yyyy' }}</td>
+          <td>{{ task.task_description }}</td>
+          <td>{{ task.task_remarks }}</td>
+          <td>{{ task.created_on | date:'dd-MM-yyyy' }}</td>
+          <td>{{ task.created_by_user_id }}</td>
+          <td>{{ task.last_updated_by_user_id || '-' }}</td>
+          <td>{{ task.is_deleted }}</td>
+
+          <td class="action-col">
+            <button class="edit-btn" (click)="onEdit(task)">Edit</button>
+            <button class="delete-btn" (click)="deleteTask(task)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
